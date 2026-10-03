@@ -1,0 +1,46 @@
+{
+  "name": "@bsgames/dev-container-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    ".": {
+      "development": "./src/index.ts",
+      "default": "./lib/index.js"
+    },
+    "./layout-commands": {
+      "development": "./src/layout-commands.ts",
+      "default": "./lib/layout-commands.js"
+    },
+    "./game-config": {
+      "development": "./src/game-config.ts",
+      "default": "./lib/game-config.js"
+    },
+    "./client-controls": {
+      "development": "./src/client-controls.ts",
+      "default": "./lib/client-controls.js"
+    },
+    "./sdk-protocol": {
+      "development": "./src/sdk-protocol.ts",
+      "default": "./lib/sdk-protocol.js"
+    },
+    "./sdk-runtime": {
+      "development": "./src/sdk-runtime.ts",
+      "default": "./lib/sdk-runtime.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vite": "catalog:vite7",
+    "@bsgames/workflow": "workspace:*"
+  }
+}

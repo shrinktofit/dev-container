@@ -1,0 +1,18 @@
+{
+  "extends": "@bsgames/workflow/tsconfig/lib",
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": true,
+    "rootDir": "src",
+    "skipLibCheck": true,
+    "customConditions": [
+      "development"
+    ],
+    "types": [
+      "node",
+    ],
+  },
+  "include": ["src"]
+}

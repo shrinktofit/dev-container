@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Dev Container</title>
+  <defs>
+    <radialGradient id="tile" cx="30%" cy="0%" r="105%">
+      <stop offset="0" stop-color="#1b2b42" />
+      <stop offset="0.52" stop-color="#0b1421" />
+      <stop offset="1" stop-color="#080f19" />
+    </radialGradient>
+    <linearGradient id="letters" x1="0" y1="0" x2="0.8" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="0.54" stop-color="#f2f7fc" />
+      <stop offset="1" stop-color="#c5d6e8" />
+    </linearGradient>
+    <linearGradient id="slash" x1="690" y1="234" x2="350" y2="748" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#cefaff" />
+      <stop offset="0.48" stop-color="#92e1f9" />
+      <stop offset="1" stop-color="#2998d8" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="216" fill="url(#tile)" />
+  <g transform="translate(-1 21)">
+    <path fill="url(#letters)" d="M140 234H406L508 336V360L386 544V374L356 344H224V636H356L282 748H140L110 718V264Z" />
+    <path fill="url(#letters)" d="M738 234H826L916 320V404H834L774 344H666ZM638 452V608L666 636H766L828 576H916V656L820 748H618L520 650V622Z" />
+    <path fill="url(#slash)" d="M634 234H746L406 748H278Z" />
+  </g>
+</svg>

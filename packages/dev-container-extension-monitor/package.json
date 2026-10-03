@@ -1,0 +1,32 @@
+{
+  "name": "@bsgames/dev-container-extension-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    "./main": {
+      "development": "./src/main/index.ts",
+      "default": "./lib/main/index.js"
+    },
+    "./renderer": {
+      "development": "./src/renderer/index.ts",
+      "default": "./lib/renderer/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "@bsgames/dev-container-api": "workspace:*",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vite": "catalog:vite7",
+    "vue-tsc": "catalog:",
+    "@bsgames/workflow": "workspace:*"
+  }
+}

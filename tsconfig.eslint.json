@@ -1,0 +1,22 @@
+{
+  "extends": "./packages/workflow/tsconfig/node.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "types": [
+      "node"
+    ],
+    "customConditions": [
+      "development"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "eslint.config.js",
+    "scripts/**/*.ts",
+    "packages/*/vite.config.ts",
+    "packages/*/tsdown.config.ts",
+    "packages/*/electron.vite.config.ts"
+  ]
+}

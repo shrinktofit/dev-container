@@ -1,0 +1,37 @@
+{
+  "name": "dev-container-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.29.3+sha512.498e1fb4cca5aa06c1dcf2611e6fafc50972ffe7189998c409e90de74566444298ffe43e6cd2acdc775ba1aa7cc5e092a8b7054c811ba8c5770f84693d33d2dc",
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "tsc --project tsconfig.eslint.json --noEmit && node --run test:typecheck && turbo run typecheck",
+    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "dev": "pnpm --filter @bsgames/dev-container dev",
+    "start": "pnpm --filter @bsgames/dev-container start",
+    "pack:win": "pnpm --filter @bsgames/dev-container pack:win",
+    "dist:win": "pnpm --filter @bsgames/dev-container dist:win",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "lint:changed": "node scripts/eslint-changed-files.ts",
+    "check": "node --run build && node --run typecheck && node --run lint && node --run test",
+    "test:typecheck": "tsc --project test/tsconfig.json --noEmit",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "@shrinktofit/eslint-config": "^0.0.16",
+    "@types/chrome-remote-interface": "^0.34.0",
+    "@types/node": "catalog:",
+    "@typescript-eslint/parser": "^8.65.0",
+    "eslint": "^10.9.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.5.0",
+    "turbo": "^2.9.10",
+    "typescript": "catalog:",
+    "vue-eslint-parser": "^10.4.1"
+  }
+}

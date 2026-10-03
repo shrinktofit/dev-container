@@ -1,0 +1,26 @@
+{
+  "extends": "../packages/workflow/tsconfig/node.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": ".",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "paths": {
+      "playwright": [
+        "U:/AgentTools/playwright/node_modules/playwright/index.d.ts"
+      ]
+    }
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

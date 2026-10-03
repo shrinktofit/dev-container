@@ -1,0 +1,27 @@
+{
+  "name": "@bsgames/dev-container-sdk",
+  "version": "0.0.1-alpha.1",
+  "private": false,
+  "type": "module",
+  "files": [
+    "lib"
+  ],
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "node --run build"
+  },
+  "devDependencies": {
+    "@bsgames/dev-container-api": "workspace:*",
+    "@bsgames/workflow": "workspace:*",
+    "tsdown": "0.23.0",
+    "typescript": "catalog:"
+  }
+}

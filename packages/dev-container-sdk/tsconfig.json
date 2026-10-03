@@ -1,0 +1,18 @@
+{
+  "extends": "@bsgames/workflow/tsconfig/basic",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "noEmit": true,
+    "customConditions": [
+      "development"
+    ]
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "@bsgames/dev-container-extension-account",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./main": {
+      "development": "./src/main/index.ts",
+      "default": "./lib/main/index.js"
+    },
+    "./renderer": {
+      "development": "./src/renderer/index.ts",
+      "default": "./lib/renderer/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@bsgames/dev-container-api": "workspace:*",
+    "vue": "catalog:"
+  },
+  "devDependencies": {
+    "@bsgames/workflow": "workspace:*",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-vue": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vue-tsc": "catalog:"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "--fullFlow"
+  ],
+  "properties": {
+    "--fullFlow": {
+      "type": "boolean",
+      "title": "完整游戏流程",
+      "default": true
+    },
+    "scene": {
+      "type": "string",
+      "title": "场景 UUID"
+    },
+    "--serverPort": {
+      "type": "integer",
+      "title": "服务器端口",
+      "minimum": 1,
+      "maximum": 65535,
+      "x-default-env": "GAME_SERVER_PORT"
+    }
+  }
+}

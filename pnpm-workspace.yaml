@@ -1,0 +1,16 @@
+packages:
+  - 'packages/*'
+allowBuilds:
+  electron: true
+  esbuild: true
+catalog:
+  '@types/node': ^25.6.0
+  '@vitejs/plugin-vue': ^6.0.6
+  electron: 42.6.0
+  typescript: ^6.0.3
+  vite: ^7.3.2
+  vue: ^3.5.19
+  vue-tsc: ^3.2.7
+catalogs:
+  vite7:
+    vite: ^7.3.2

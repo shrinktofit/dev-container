@@ -1,0 +1,50 @@
+{
+  "name": "@bsgames/dev-container",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./lib/main/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "electron-vite build",
+    "build:icons": "node scripts/build-icons.ts",
+    "deploy:stage": "node scripts/deploy-stage.ts",
+    "pack:win": "node scripts/build-win.ts --dir",
+    "dist:win": "node scripts/build-win.ts --zip",
+    "dev": "electron-vite dev --",
+    "preview": "electron-vite preview --",
+    "start": "electron-vite preview --skipBuild --",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@bsgames/dev-container-api": "workspace:*",
+    "@bsgames/dev-container-extension-account": "workspace:*",
+    "@bsgames/dev-container-extension-client-simulator": "workspace:*",
+    "@bsgames/dev-container-extension-logs": "workspace:*",
+    "@bsgames/dev-container-extension-monitor": "workspace:*",
+    "@bsgames/dev-container-extension-room": "workspace:*",
+    "@bsgames/dev-container-extension-vortex": "workspace:*",
+    "ajv": "^8.18.0",
+    "dockview-core": "^5.1.0",
+    "dockview-vue": "^5.1.0",
+    "vue": "catalog:",
+    "vuetify": "^4.0.6",
+    "yaml": "^2.7.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@bsgames/workflow": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/yargs": "^17.0.33",
+    "@vitejs/plugin-vue": "catalog:",
+    "electron": "catalog:",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "sharp": "^0.35.5",
+    "typescript": "catalog:",
+    "vite": "catalog:vite7",
+    "vue-tsc": "catalog:"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@bsgames/dev-container-extension-vortex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./main": {
+      "development": "./src/main/index.ts",
+      "default": "./lib/main/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bsgames/dev-container-api": "workspace:*"
+  },
+  "devDependencies": {
+    "@bsgames/workflow": "workspace:*",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

@@ -1,0 +1,9 @@
+version: 1
+game:
+  id: example-game
+  title: Example Game
+client:
+  dir: client
+  subpath: super-preview
+launch:
+  schema: launch-params.schema.json
