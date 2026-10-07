@@ -1,3 +1,4 @@
+import CDP from 'chrome-remote-interface';
 import process from 'node:process';
 import { test, type TestContext } from 'node:test';
 import type { AddressInfo } from 'node:net';
@@ -11,10 +12,6 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const require = createRequire(root + '/packages/dev-container/package.json');
-const shared = createRequire(
-  (process.env.DEV_CONTAINER_PLAYWRIGHT_ROOT ?? 'U:/AgentTools/playwright') + '/package.json',
-);
-const CDP: typeof import('chrome-remote-interface') = shared('chrome-remote-interface');
 const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
 
 async function until<T>(

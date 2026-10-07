@@ -1,8 +1,9 @@
+import CDP from 'chrome-remote-interface';
 import { gzipSync } from 'node:zlib';
 import process from 'node:process';
 import { test, type TestContext } from 'node:test';
 import type { AddressInfo } from 'node:net';
-import type { Browser } from 'playwright';
+import { chromium, type Browser } from 'playwright';
 import type { Client as CdpClient, Target } from 'chrome-remote-interface';
 import type { DebugSession, NativeWindow, UserFile, WindowLayout } from './fixture-types.ts';
 import assert from 'node:assert/strict';
@@ -13,11 +14,6 @@ import { once } from 'node:events';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
-const shared = createRequire(
-  (process.env.DEV_CONTAINER_PLAYWRIGHT_ROOT ?? 'U:/AgentTools/playwright') + '/package.json',
-);
-const { chromium }: typeof import('playwright') = shared('playwright');
-const CDP: typeof import('chrome-remote-interface') = shared('chrome-remote-interface');
 const require = createRequire(root + '/packages/dev-container/package.json');
 const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
 
