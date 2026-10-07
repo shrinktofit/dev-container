@@ -7,19 +7,20 @@
   "scripts": {
     "build": "turbo run build",
     "typecheck": "tsc --project tsconfig.eslint.json --noEmit && node --run test:typecheck && turbo run typecheck",
-    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "test": "node --run test:prepare && node --test --test-concurrency=1 test/*.test.ts",
     "dev": "pnpm --filter @bsgames/dev-container dev",
     "start": "pnpm --filter @bsgames/dev-container start",
     "pack:win": "pnpm --filter @bsgames/dev-container pack:win",
     "dist:win": "pnpm --filter @bsgames/dev-container dist:win",
-    "lint": "eslint . --max-warnings=0",
-    "lint:fix": "eslint . --fix --max-warnings=0",
-    "lint:changed": "node scripts/eslint-changed-files.ts",
+    "lint": "node --run test:prepare && eslint . --max-warnings=0",
+    "lint:fix": "node --run test:prepare && eslint . --fix --max-warnings=0",
+    "lint:changed": "node --run test:prepare && node scripts/eslint-changed-files.ts",
     "check": "node --run build && node --run typecheck && node --run lint && node --run test",
-    "test:typecheck": "tsc --project test/tsconfig.json --noEmit",
+    "test:typecheck": "node --run test:prepare && tsc --project test/tsconfig.json --noEmit",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "test:prepare": "node scripts/link-test-tools.ts"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",

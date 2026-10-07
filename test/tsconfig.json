@@ -13,12 +13,7 @@
       "DOM",
       "DOM.Iterable"
     ],
-    "skipLibCheck": true,
-    "paths": {
-      "playwright": [
-        "U:/AgentTools/playwright/node_modules/playwright/index.d.ts"
-      ]
-    }
+    "skipLibCheck": true
   },
   "include": [
     "./**/*.ts"

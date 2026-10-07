@@ -136,7 +136,7 @@ SDK 发布地址固定为官方 npm，发布前由 prepublishOnly 构建 ESM 和
 
 保留 packages/dev-container、dev-container-api、dev-container-extension-client-simulator 和 workflow 的组织方式；宿主按 main/preload/renderer/shared/extensions 分层。Vortex 预览接入和 account 是编译期内部扩展，logs/room/monitor 保留占位面板。没有外部插件安装或动态加载。
 
-pnpm test 检查公共 SDK 和真实 Electron app，两种视图覆盖只读 ID 登录/退出、刷新、用户切换、外置 schema 与字段名 URL 参数、偏好设置、宿主状态恢复和配置错误。浏览器测试使用共享 Playwright：默认 U:/AgentTools/playwright，可通过 DEV_CONTAINER_PLAYWRIGHT_ROOT 指向现有共享安装；不会给 workspace 安装 Playwright。DEV_CONTAINER_TEST_PACKAGED=1 启用 Windows 包启动检查。
+pnpm test 检查公共 SDK 和真实 Electron app，两种视图覆盖只读 ID 登录/退出、刷新、用户切换、外置 schema 与字段名 URL 参数、偏好设置、宿主状态恢复和配置错误。浏览器测试使用共享 Playwright：默认 U:/AgentTools/playwright，可通过 DEV_CONTAINER_PLAYWRIGHT_ROOT 指向现有共享安装；不会给 workspace 安装 Playwright。test、test:typecheck 和 lint 命令会将共享安装链接到被 Git 忽略的 test/node_modules，类型检查与运行时使用同一份工具。CI 在 runner 临时目录准备固定版本的共享 Playwright，仅用于类型解析，不下载或启动浏览器。DEV_CONTAINER_TEST_PACKAGED=1 启用 Windows 包启动检查。
 
 第一版不包含游戏生命周期、广告、游客、旧状态迁移和存档导入导出。
 
