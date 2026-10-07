@@ -5,7 +5,7 @@ import { join, resolve, sep } from 'node:path';
 import process from 'node:process';
 import { test } from 'node:test';
 
-const root = resolve(import.meta.dirname, '..');
+const root = resolve(import.meta.dirname, '../..');
 const script = join(root, 'scripts/eslint-changed-files.ts');
 
 await test((
@@ -16,7 +16,7 @@ await test((
   /// warning, and deletions.
   /// @expect The TypeScript CLI checks only eligible changed files, handles spaces in paths, and
   /// fails on errors, warnings or invalid arguments.
-  const testRoot = join(root, '.test-runs');
+  const testRoot = join(import.meta.dirname, '../.test-runs');
   mkdirSync(testRoot, { recursive: true });
   const directory = mkdtempSync(join(testRoot, 'lint-cli-'));
   t.after(() => {

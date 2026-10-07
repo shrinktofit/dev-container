@@ -8,16 +8,15 @@ import { join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import process from 'node:process';
 
-const appDirectory = resolve(import.meta.dirname, '../packages/dev-container');
-const require = createRequire(join(appDirectory, 'package.json'));
+const appDirectory = resolve(import.meta.dirname, '../../dev-container');
+const require = createRequire(import.meta.url);
 const electron: string = require('electron');
 const env = { ...process.env };
 delete env.ELECTRON_RUN_AS_NODE;
 
-function probe(args: string[], cwd: string) {
+function runApp(args: string[], cwd: string) {
   const result = spawnSync(electron, [
     appDirectory,
-    'probe',
     ...args,
   ], {
     cwd,
@@ -30,15 +29,40 @@ function probe(args: string[], cwd: string) {
   return result;
 }
 
-void test('probe queries an unopened directory without requiring configuration', (t) => {
-  /// @case Query an empty directory with cwd, relative/absolute --game, and invalid targets.
-  /// @expect No instance returns false/code 1; errors return code 2 without opening a window.
-  const game = mkdtempSync(join(tmpdir(), 'dev-container-probe-'));
+function probe(args: string[], cwd: string) {
+  return runApp(['probe', ...args], cwd);
+}
+
+void test('opening a game requires an explicit directory', (t) => {
+  /// @case Invoke launch with no directory, a blank value, extra arguments or the removed option.
+  /// @expect Invalid inputs exit with code 2 without creating game state; help exits successfully.
+  const game = mkdtempSync(join(tmpdir(), 'dev-container launch-'));
   t.after(() => rmSync(game, { recursive: true, force: true }));
   for (const args of [
     [],
-    ['--game', '.'],
-    ['--game=' + game],
+    [''],
+    ['   '],
+    [game, 'extra'],
+    ['--game', game],
+  ]) {
+    const result = runApp(args, game);
+    assert.equal(result.status, 2, result.stderr);
+    assert.ok(result.stderr.trim());
+  }
+  const help = runApp(['--help'], game);
+  assert.equal(help.status, 0, help.stderr);
+  assert.match(help.stdout, /<directory>/u);
+  assert.equal(existsSync(join(game, '.dev-container')), false);
+});
+
+void test('probe queries an unopened directory without requiring configuration', (t) => {
+  /// @case Query relative/absolute paths, including spaces and invalid targets.
+  /// @expect No instance returns false/code 1; errors return code 2 without opening a window.
+  const game = mkdtempSync(join(tmpdir(), 'dev-container probe-'));
+  t.after(() => rmSync(game, { recursive: true, force: true }));
+  for (const args of [
+    ['.'],
+    [game],
   ]) {
     const result = probe(args, game);
     assert.equal(result.status, 1, result.stderr);
@@ -49,14 +73,17 @@ void test('probe queries an unopened directory without requiring configuration',
   assert.equal(help.status, 0, help.stderr);
   assert.match(help.stdout, /Check whether the target game already has an instance/u);
   for (const args of [
-    ['--game'],
-    ['--game='],
-    ['--game', join(game, 'missing')],
-    ['--unknown'],
-    ['--remote-debugging-port'],
-    ['--remote-debugging-port=-1'],
-    ['--remote-debugging-port=65536'],
-    ['--remote-debugging-port=abc'],
+    [],
+    [''],
+    ['   '],
+    [join(game, 'missing')],
+    ['.', 'extra'],
+    ['--game', game],
+    ['.', '--unknown'],
+    ['.', '--remote-debugging-port'],
+    ['.', '--remote-debugging-port=-1'],
+    ['.', '--remote-debugging-port=65536'],
+    ['.', '--remote-debugging-port=abc'],
   ]) {
     const result = probe(args, game);
     assert.equal(result.status, 2, result.stderr);
@@ -75,7 +102,6 @@ for (const validConfig of [true, false]) {
       : { version: 999 }));
     const child = spawn(electron, [
       appDirectory,
-      '--game',
       game,
     ], {
       cwd: game,
@@ -115,7 +141,7 @@ for (const validConfig of [true, false]) {
     while (Date.now() < deadline) {
       // Let the launched process acquire its lock before the first probe.
       await new Promise((accept) => setTimeout(accept, 100));
-      const result = probe(['--game', game], other);
+      const result = probe([game], other);
       if (result.status === 0) {
         assert.deepEqual(JSON.parse(result.stdout), { running: true });
         running = true;
@@ -125,15 +151,15 @@ for (const validConfig of [true, false]) {
       assert.equal(child.exitCode, null);
     }
     assert.equal(running, true);
-    assert.equal(probe(['--game', other], game).status, 1);
+    assert.equal(probe([other], game).status, 1);
     if (process.platform === 'win32') {
-      const differentlyCased = probe(['--game', game.toUpperCase()], other);
+      const differentlyCased = probe([game.toUpperCase()], other);
       assert.equal(differentlyCased.status, 0, differentlyCased.stderr);
     }
     const exited = once(child, 'exit');
     child.kill();
     await exited;
-    const result = probe(['--game', game], other);
+    const result = probe([game], other);
     assert.equal(result.status, 1, result.stderr);
     assert.deepEqual(JSON.parse(result.stdout), { running: false });
   });

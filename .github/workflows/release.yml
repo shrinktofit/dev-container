@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 concurrency:
@@ -18,8 +21,31 @@ env:
   ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
 
 jobs:
+  validation:
+    name: Check SDK and workspace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Build SDK and internal dependencies
+        run: pnpm exec turbo run build --filter=@bsgames/dev-container-sdk...
+      - name: Check SDK types
+        run: pnpm --filter @bsgames/dev-container-sdk typecheck
+      - name: Check test types
+        run: node --run test:typecheck
+      - name: Lint workspace
+        run: node --run lint
+
   plan:
     name: Select release mode
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     outputs:
       mode: ${{ steps.mode.outputs.mode }}
@@ -62,7 +88,7 @@ jobs:
 
   publish:
     name: Publish SDK to npm
-    needs: plan
+    needs: [plan, validation]
     if: needs.plan.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     permissions:
@@ -80,10 +106,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Build SDK and internal dependencies
         run: pnpm exec turbo run build --filter=@bsgames/dev-container-sdk...
-      - name: Check SDK types
-        run: pnpm --filter @bsgames/dev-container-sdk typecheck
-      - name: Lint workspace
-        run: node --run lint
       - uses: changesets/action/publish@v2.1.2
         with:
           script: node --run release

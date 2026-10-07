@@ -16,13 +16,16 @@
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "node --run build"
+    "prepublishOnly": "node --run build",
+    "test": "node --test test/*.test.ts",
+    "test:typecheck": "tsc --project test/tsconfig.json --noEmit"
   },
   "devDependencies": {
     "@bsgames/dev-container-api": "workspace:*",
     "@bsgames/workflow": "workspace:*",
     "tsdown": "0.23.0",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@types/node": "catalog:"
   },
   "repository": {
     "type": "git",

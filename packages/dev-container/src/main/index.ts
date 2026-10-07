@@ -24,14 +24,16 @@ async function start(): Promise<void> {
   try {
     args = yargs(argv)
       .scriptName('dev-container')
-      .command('$0', 'Open the target game in Dev Container')
-      .command('probe', 'Check whether the target game already has an instance')
-      .option('game', {
-        type: 'string',
-        requiresArg: true,
-        default: process.cwd(),
-        description: 'Target game directory (defaults to cwd)',
-      })
+      .command('$0 <directory>', 'Open the target game in Dev Container', (command) =>
+        command.positional('directory', { type: 'string', description: 'Target game directory' }))
+      .command(
+        'probe <directory>',
+        'Check whether the target game already has an instance',
+        (command) => command.positional('directory', {
+          type: 'string',
+          description: 'Target game directory',
+        }),
+      )
       .option('remote-debugging-port', {
         type: 'number',
         requiresArg: true,
@@ -52,8 +54,11 @@ async function start(): Promise<void> {
       .help()
       .exitProcess(false)
       .check((values) => {
-        if (!values.game.trim()) {
-          throw new Error('--game requires a target folder.');
+        if (values.help) {
+          return true;
+        }
+        if (typeof values.directory !== 'string' || !values.directory.trim()) {
+          throw new Error('directory requires a target folder.');
         }
         const port = values['remote-debugging-port'];
         if (port !== undefined && (!Number.isInteger(port) || port < 0 || port > 65535)) {
@@ -74,7 +79,7 @@ async function start(): Promise<void> {
     return;
   }
   probe = args._[0] === 'probe';
-  const targetDirectory = realpathSync.native(resolve(args.game));
+  const targetDirectory = realpathSync.native(resolve(args.directory as string));
   const stateDirectory = join(targetDirectory, '.dev-container');
   const userData = join(stateDirectory, 'electron/user-data');
   mkdirSync(userData, { recursive: true });
