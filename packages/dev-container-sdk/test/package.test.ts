@@ -4,13 +4,12 @@ import assert from 'node:assert/strict';
 import { cpSync, writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { resolve, join } from 'node:path';
-const root = resolve(import.meta.dirname, '..');
+const sdk = resolve(import.meta.dirname, '..');
 await test('public package bare specifier imports ESM and provides declarations', () => {
   /// @case A consumer receives only the SDK manifest and built lib folder.
   /// @expect Bare-specifier JavaScript import is side-effect-free and public readonly ID-only
   /// account types compile and the removed storage entry is unavailable.
-  const sdk = join(root, 'packages/dev-container-sdk'),
-    consumer = join(root, '.test-runs', 'consumer-' + Date.now()),
+  const consumer = join(sdk, '.test-runs', 'consumer-' + Date.now()),
     installed = join(consumer, 'node_modules/@bsgames/dev-container-sdk');
   mkdirSync(installed, {
     recursive: true,
@@ -109,17 +108,26 @@ await test('public package bare specifier imports ESM and provides declarations'
       + 'void user.avatar;\n  return user;\n}\nvoid game;\n'
     ),
   );
+  writeFileSync(
+    join(consumer, 'tsconfig.json'),
+    JSON.stringify({
+      compilerOptions: {
+        strict: true,
+        noEmit: true,
+        module: 'NodeNext',
+        target: 'ES2022',
+        lib: ['ES2022', 'DOM'],
+        types: [],
+      },
+      include: ['consumer.ts'],
+    }),
+  );
   execFileSync(
     process.execPath,
     [
-      root + '/node_modules/typescript/bin/tsc',
-      '--strict',
-      '--noEmit',
-      '--module',
-      'NodeNext',
-      '--target',
-      'ES2022',
-      'consumer.ts',
+      sdk + '/node_modules/typescript/bin/tsc',
+      '--project',
+      'tsconfig.json',
     ],
     {
       cwd: consumer,

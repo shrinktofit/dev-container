@@ -10,8 +10,8 @@ import { createServer } from 'node:http';
 import { once } from 'node:events';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-const root = resolve(import.meta.dirname, '..');
-const require = createRequire(root + '/packages/dev-container/package.json');
+const root = resolve(import.meta.dirname, '../../..');
+const require = createRequire(import.meta.url);
 const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
 
 async function until<T>(
@@ -29,7 +29,7 @@ async function until<T>(
 }
 
 function target(mode: string, empty = false) {
-  const game = join(root, '.test-runs', 'debug-' + mode + '-' + Date.now());
+  const game = join(import.meta.dirname, '../.test-runs', 'debug-' + mode + '-' + Date.now());
   mkdirSync(join(game, '.dev-container'), { recursive: true });
   writeFileSync(
     join(game, 'dev-container.config.yaml'),

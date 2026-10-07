@@ -7,7 +7,7 @@
   "scripts": {
     "build": "turbo run build",
     "typecheck": "tsc --project tsconfig.eslint.json --noEmit && node --run test:typecheck && turbo run typecheck",
-    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "test": "node --run test:scripts && turbo run test",
     "dev": "pnpm --filter @bsgames/dev-container dev",
     "start": "pnpm --filter @bsgames/dev-container start",
     "pack:win": "pnpm --filter @bsgames/dev-container pack:win",
@@ -16,22 +16,20 @@
     "lint:fix": "eslint . --fix --max-warnings=0",
     "lint:changed": "node scripts/eslint-changed-files.ts",
     "check": "node --run build && node --run typecheck && node --run lint && node --run test",
-    "test:typecheck": "tsc --project test/tsconfig.json --noEmit",
+    "test:typecheck": "tsc --project scripts/test/tsconfig.json --noEmit && pnpm -r --if-present run test:typecheck",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "test:scripts": "node --test scripts/test/*.test.ts"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
     "@shrinktofit/eslint-config": "^0.0.16",
-    "@types/chrome-remote-interface": "^0.34.0",
     "@types/node": "catalog:",
     "@typescript-eslint/parser": "^8.65.0",
-    "chrome-remote-interface": "0.34.0",
     "eslint": "^10.9.0",
     "eslint-plugin-vue": "^10.10.0",
     "globals": "^17.5.0",
-    "playwright": "1.60.0",
     "turbo": "^2.9.10",
     "typescript": "catalog:",
     "vue-eslint-parser": "^10.4.1"

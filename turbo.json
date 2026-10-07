@@ -12,6 +12,13 @@
       "dependsOn": [
         "^build"
       ]
+    },
+    "test": {
+      "dependsOn": [
+        "build",
+        "^build"
+      ],
+      "cache": false
     }
   }
 }

@@ -1,12 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import type { DevContainerAccount } from '../packages/dev-container-sdk/lib/index.js';
+import type { DevContainerAccount } from '../lib/index.js';
 
 await test('ordinary preview can import the SDK without a host', async () => {
   /// @case The SDK is imported in an environment without a Dev Container runtime.
   /// @expect Import succeeds, availability is false and account is honestly absent.
   const sdk = await import(
-    new URL('../packages/dev-container-sdk/lib/index.js?ordinary', import.meta.url).href,
+    new URL('../lib/index.js?ordinary', import.meta.url).href,
   );
   assert.equal(sdk.isAvailable(), false);
   assert.equal(sdk.account, undefined);
@@ -60,7 +60,7 @@ await test((
     }
   });
   const sdk = await import(
-    new URL('../packages/dev-container-sdk/lib/index.js?host', import.meta.url).href,
+    new URL('../lib/index.js?host', import.meta.url).href,
   );
   assert.equal(sdk.isAvailable(), true);
   assert.equal(sdk.account, hostAccount);
@@ -98,7 +98,7 @@ await test((
     }
   });
   const sdk = await import(
-    new URL('../packages/dev-container-sdk/lib/index.js?runtime-only', import.meta.url).href,
+    new URL('../lib/index.js?runtime-only', import.meta.url).href,
   );
   assert.equal(sdk.account, undefined);
   assert.equal(sdk.isAvailable(), true);

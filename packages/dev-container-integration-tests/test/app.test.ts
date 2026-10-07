@@ -13,8 +13,9 @@ import { spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-const root = resolve(import.meta.dirname, '..');
-const require = createRequire(root + '/packages/dev-container/package.json');
+const root = resolve(import.meta.dirname, '../../..');
+const testDirectory = resolve(import.meta.dirname, '../.test-runs');
+const require = createRequire(import.meta.url);
 const sleep = (ms: number) => new Promise((accept) => setTimeout(accept, ms));
 
 async function until<T>(
@@ -721,7 +722,7 @@ await test(
     /// keyword.
     /// @expect The app displays its configuration path and concrete validation error without a
     /// preview fallback.
-    const game = join(root, '.test-runs', 'invalid-' + Date.now());
+    const game = join(testDirectory, 'invalid-' + Date.now());
     mkdirSync(game, {
       recursive: true,
     });
@@ -747,7 +748,7 @@ if (process.env.DEV_CONTAINER_TEST_PACKAGED === '1') {
       /// @case The Windows directory package is started with an invalid target config.
       /// @expect The real executable loads its bundled UI and displays a useful configuration
       /// error.
-      const game = join(root, '.test-runs', 'packaged-' + Date.now());
+      const game = join(testDirectory, 'packaged-' + Date.now());
       mkdirSync(game, {
         recursive: true,
       });
@@ -780,7 +781,7 @@ await test(
       { dir: 'ABSOLUTE', subpath: '/custom/preview' },
     ];
     for (const [index, client] of cases.entries()) {
-      const game = join(root, '.test-runs', 'vortex-path-' + Date.now() + '-' + index);
+      const game = join(testDirectory, 'vortex-path-' + Date.now() + '-' + index);
       mkdirSync(game, { recursive: true });
       if (client?.dir === 'ABSOLUTE') {
         client.dir = join(game, 'absolute-client');
@@ -824,7 +825,7 @@ await test(
     /// unreachable session.
     /// @expect The client shows the exact session path and reason, never uses a different session,
     /// and retries successfully after correction.
-    const parent = join(root, '.test-runs', 'vortex-errors-' + Date.now()),
+    const parent = join(testDirectory, 'vortex-errors-' + Date.now()),
       game = join(parent, 'game');
     mkdirSync(game, { recursive: true });
     writeEditorSession(parent, 7456, '.');
@@ -926,7 +927,7 @@ await test(
         subpath,
       })),
     ]) {
-      const game = join(root, '.test-runs', 'vortex-invalid-' + Date.now());
+      const game = join(testDirectory, 'vortex-invalid-' + Date.now());
       mkdirSync(game, { recursive: true });
       writeFileSync(
         join(game, 'dev-container.config.yaml'),
@@ -953,7 +954,7 @@ await test(
     /// state exists.
     /// @expect Errors identify both files, and restoring defaults repairs only launch values
     /// without changing the bound user.
-    const game = join(root, '.test-runs', 'external-' + Date.now());
+    const game = join(testDirectory, 'external-' + Date.now());
     mkdirSync(game, { recursive: true });
     writeFileSync(join(game, 'dev-container.config.yaml'), configText('webview'));
     let app = await start(game, t);
@@ -1026,7 +1027,7 @@ await test(
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     t.after(() => server.close());
-    const game = join(root, '.test-runs', 'preference-' + Date.now());
+    const game = join(testDirectory, 'preference-' + Date.now());
     mkdirSync(game, { recursive: true });
     const config = JSON.stringify({ version: 1, game: { id: 'preference', title: 'Preference' } });
     writeFileSync(join(game, 'dev-container.config.yaml'), config);
@@ -1114,7 +1115,7 @@ await test(
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     t.after(() => server.close());
-    const game = join(root, '.test-runs', 'schema-paths-' + Date.now());
+    const game = join(testDirectory, 'schema-paths-' + Date.now());
     mkdirSync(join(game, 'client'), { recursive: true });
     const schemaFile = join(game, 'client/launch-params.schema.json');
     const base = {
@@ -1198,7 +1199,7 @@ await test(
     /// creation and rename.
     /// @expect Readable text contrasts with the workbench surface; users display and both
     /// management operations persist.
-    const game = join(root, '.test-runs', 'account-panel-' + Date.now());
+    const game = join(testDirectory, 'account-panel-' + Date.now());
     mkdirSync(game, { recursive: true });
     writeFileSync(
       join(game, 'dev-container.config.yaml'),
@@ -1288,7 +1289,7 @@ await test(
     /// host restarts with the saved empty layout.
     /// @expect Dimensions persist without reloading the game; no closed client returns, and
     /// restoring defaults creates a usable client.
-    const game = join(root, '.test-runs', 'workbench-' + Date.now());
+    const game = join(testDirectory, 'workbench-' + Date.now());
     mkdirSync(game, { recursive: true });
     writeFileSync(
       join(game, 'dev-container.config.yaml'),
@@ -1350,7 +1351,7 @@ for (const mode of ['webview', 'iframe']) {
       /// @expect User creation selects the new persisted user without creating a client; launch
       /// fields collapse on each opening, and a confirmed client preserves its user, name and
       /// parameters across restart.
-      const game = join(root, '.test-runs', 'create-client-' + mode + '-' + Date.now());
+      const game = join(testDirectory, 'create-client-' + mode + '-' + Date.now());
       mkdirSync(game, { recursive: true });
       prepareLaunchFiles(game, mode);
       writeFileSync(join(game, 'dev-container.config.yaml'), configText(mode));
@@ -1581,7 +1582,7 @@ for (const mode of ['webview', 'iframe']) {
       server.listen(0, '127.0.0.1');
       await once(server, 'listening');
       t.after(() => server.close());
-      const game = join(root, '.test-runs', 'native-close-' + mode + '-' + Date.now());
+      const game = join(testDirectory, 'native-close-' + mode + '-' + Date.now());
       mkdirSync(game, { recursive: true });
       prepareLaunchFiles(game, mode);
       writeFileSync(join(game, 'dev-container.config.yaml'), configText(mode, 'native-close'));
@@ -1643,7 +1644,7 @@ await test(
     server.listen(0, '127.0.0.1');
     await once(server, 'listening');
     t.after(() => server.close());
-    const game = join(root, '.test-runs', 'native-title-' + Date.now());
+    const game = join(testDirectory, 'native-title-' + Date.now());
     mkdirSync(game, { recursive: true });
     prepareLaunchFiles(game, 'webview');
     writeFileSync(join(game, 'dev-container.config.yaml'), configText('webview', 'native-title'));
@@ -1757,7 +1758,7 @@ await test(
       saveLayout: false,
     };
     for (const currentExists of [false, true]) {
-      const game = join(root, '.test-runs', 'preference-state-' + currentExists + '-' + Date.now());
+      const game = join(testDirectory, 'preference-state-' + currentExists + '-' + Date.now());
       mkdirSync(join(game, '.dev-container'), { recursive: true });
       writeFileSync(
         join(game, 'dev-container.config.yaml'),
@@ -1811,7 +1812,7 @@ for (const mode of ['webview', 'iframe']) {
       server.listen(0, '127.0.0.1');
       await once(server, 'listening');
       t.after(() => server.close());
-      const game = join(root, '.test-runs', 'env-' + mode + '-' + Date.now());
+      const game = join(testDirectory, 'env-' + mode + '-' + Date.now());
       mkdirSync(game, { recursive: true });
       prepareLaunchFiles(game, mode);
       writeEditorSession(game, (server.address() as AddressInfo).port);
@@ -2004,7 +2005,7 @@ await test(
       },
     ];
     for (const [index, scenario] of cases.entries()) {
-      const game = join(root, '.test-runs', 'env-invalid-' + Date.now() + '-' + index);
+      const game = join(testDirectory, 'env-invalid-' + Date.now() + '-' + index);
       mkdirSync(game, { recursive: true });
       writeFileSync(join(game, 'dev-container.config.yaml'), configText('webview'));
       writeFileSync(join(game, '.env.local'), scenario.env);

@@ -1,4 +1,4 @@
-import type { DevContainerAccount } from '../packages/dev-container-sdk/lib/index.js';
+import type { DevContainerAccount } from '@bsgames/dev-container-sdk';
 interface HostUser {
   id: string;
   name: string;

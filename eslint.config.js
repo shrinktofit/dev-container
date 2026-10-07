@@ -14,7 +14,7 @@ export default defineConfig([
     '**/.deploy/',
     '**/.turbo/',
     '**/.dev-container/',
-    '.test-runs/',
+    '**/.test-runs/',
   ]),
   { settings: { node: { version: '>=26.0.0' } } },
   ...vue.configs['flat/recommended'],
@@ -40,7 +40,7 @@ export default defineConfig([
       },
     },
     rules: {
-      // Workspace exports, build tooling and shared test runtimes are resolved by TypeScript.
+      // Workspace exports and build tooling are resolved by TypeScript.
       'n/no-extraneous-import': 'off',
       'n/no-unpublished-import': 'off',
       'no-useless-assignment': 'off',
@@ -95,7 +95,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['test/**/*.ts'],
+    files: ['packages/dev-container-integration-tests/test/**/*.ts'],
     languageOptions: { globals: globals.browser },
     rules: {
       // Browser callbacks execute inside the fixture page, outside the test process.

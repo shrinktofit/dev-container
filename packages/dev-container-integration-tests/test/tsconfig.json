@@ -1,5 +1,5 @@
 {
-  "extends": "../packages/workflow/tsconfig/node.json",
+  "extends": "../../workflow/tsconfig/node.json",
   "compilerOptions": {
     "noEmit": true,
     "rootDir": ".",

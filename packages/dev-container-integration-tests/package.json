@@ -1,0 +1,22 @@
+{
+  "name": "@bsgames/dev-container-integration-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test --test-concurrency=1 test/*.test.ts",
+    "test:typecheck": "tsc --project test/tsconfig.json --noEmit",
+    "typecheck": "node --run test:typecheck"
+  },
+  "devDependencies": {
+    "@bsgames/dev-container": "workspace:*",
+    "@bsgames/dev-container-sdk": "workspace:*",
+    "@bsgames/workflow": "workspace:*",
+    "@types/chrome-remote-interface": "^0.34.0",
+    "@types/node": "catalog:",
+    "chrome-remote-interface": "^0.34.0",
+    "electron": "catalog:",
+    "playwright": "^1.60.0",
+    "typescript": "catalog:"
+  }
+}

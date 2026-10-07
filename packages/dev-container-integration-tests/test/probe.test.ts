@@ -8,8 +8,8 @@ import { join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import process from 'node:process';
 
-const appDirectory = resolve(import.meta.dirname, '../packages/dev-container');
-const require = createRequire(join(appDirectory, 'package.json'));
+const appDirectory = resolve(import.meta.dirname, '../../dev-container');
+const require = createRequire(import.meta.url);
 const electron: string = require('electron');
 const env = { ...process.env };
 delete env.ELECTRON_RUN_AS_NODE;
