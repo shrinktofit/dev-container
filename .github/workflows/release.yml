@@ -1,0 +1,89 @@
+name: Release SDK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  npm_config_registry: https://registry.npmjs.org
+  ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+
+jobs:
+  plan:
+    name: Select release mode
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - id: mode
+        uses: changesets/action/select-mode@v2.1.2
+
+  version:
+    name: Create SDK version pull request
+    needs: plan
+    if: needs.plan.outputs.mode == 'version'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - uses: changesets/action/version@v2.1.2
+        with:
+          script: node --run version
+          pr-title: Release Dev Container SDK
+          commit-message: 'chore: version Dev Container SDK'
+
+  publish:
+    name: Publish SDK to npm
+    needs: plan
+    if: needs.plan.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - name: Build SDK and internal dependencies
+        run: pnpm exec turbo run build --filter=@bsgames/dev-container-sdk...
+      - name: Check SDK types
+        run: pnpm --filter @bsgames/dev-container-sdk typecheck
+      - name: Lint workspace
+        run: node --run lint
+      - uses: changesets/action/publish@v2.1.2
+        with:
+          script: node --run release

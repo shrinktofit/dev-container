@@ -23,5 +23,10 @@
     "@bsgames/workflow": "workspace:*",
     "tsdown": "0.23.0",
     "typescript": "catalog:"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrinktofit/dev-container.git",
+    "directory": "packages/dev-container-sdk"
   }
 }
