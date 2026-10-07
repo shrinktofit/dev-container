@@ -17,6 +17,7 @@ files:
       - package.json
 
 win:
+  executableName: dev-container
   icon: build-resources/dev-container-icon.ico
   target:
     - target: zip

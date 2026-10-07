@@ -105,17 +105,15 @@ async function start(
   };
   delete env.ELECTRON_RUN_AS_NODE;
   const binary: string = packaged
-    ? root + '/packages/dev-container/.deploy/dist/win-unpacked/Dev Container.exe'
+    ? root + '/packages/dev-container/.deploy/dist/win-unpacked/dev-container.exe'
     : require('electron');
   const args = packaged
     ? [
-      '--game',
       game,
       '--remote-debugging-port=0',
     ]
     : [
       root + '/packages/dev-container',
-      '--game',
       game,
       '--remote-debugging-port=0',
     ];

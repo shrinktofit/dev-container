@@ -66,13 +66,12 @@ function launch(
   const env = { ...process.env };
   delete env.ELECTRON_RUN_AS_NODE;
   const binary: string = packaged
-    ? join(root, 'packages/dev-container/.deploy/dist/win-unpacked/Dev Container.exe')
+    ? join(root, 'packages/dev-container/.deploy/dist/win-unpacked/dev-container.exe')
     : require('electron');
   const child = spawn(
     binary,
     [
       ...(packaged ? [] : [join(root, 'packages/dev-container')]),
-      '--game',
       game,
       ...args,
     ],
